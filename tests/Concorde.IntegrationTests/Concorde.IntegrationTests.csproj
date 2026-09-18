@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\src\Concorde.Api\Concorde.Api.csproj" />
     <ProjectReference Include="..\..\src\Concorde.Application\Concorde.Application.csproj" />
     <ProjectReference Include="..\..\src\Concorde.Domain\Concorde.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Concorde.Infrastructure\Concorde.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

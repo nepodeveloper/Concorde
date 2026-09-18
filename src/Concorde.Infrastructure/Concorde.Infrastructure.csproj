@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Concorde.Application\Concorde.Application.csproj" />
     <ProjectReference Include="..\Concorde.Domain\Concorde.Domain.csproj" />
   </ItemGroup>
