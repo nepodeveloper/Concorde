@@ -1,0 +1,19 @@
+ÔØ» Building...
+Ô£ö Building...
+Initial chunk files | Names             |  Raw size | Estimated transfer size
+main-ADFOS46Q.js    | main              | 271.40 kB |                75.18 kB
+styles-C7WQGR4E.css | styles            | 924 bytes |               924 bytes
+
+                    | Initial total     | 272.32 kB |                76.11 kB
+
+Lazy chunk files    | Names             |  Raw size | Estimated transfer size
+chunk-KllGPnQ2.js   | create-order-page |  50.43 kB |                11.20 kB
+chunk-BZ0D-A6N.js   | order-detail-page |   6.05 kB |                 2.14 kB
+chunk-Cwrhpkau.js   | order-list-page   |   4.43 kB |                 1.76 kB
+chunk-B6w-ave8.js   | -                 | 669 bytes |               669 bytes
+
+Application bundle generation complete. [4.594 seconds] - 2026-09-18T21:49:37.126Z
+
+Output location: C:\Users\27769\Documents\Nepo\Concorde\web\concorde-web\dist\concorde-web
+
+

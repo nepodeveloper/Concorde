@@ -1,0 +1,59 @@
+<div class="page-header">
+  <h1>Orders</h1>
+  <a routerLink="/orders/new" class="btn btn-primary">New Order</a>
+</div>
+
+<div class="toolbar">
+  <label for="statusFilter">Status:</label>
+  <select
+    id="statusFilter"
+    [value]="statusFilter()"
+    (change)="filterChanged($any($event.target).value)"
+  >
+    <option value="">All</option>
+    @for (status of statuses; track status) {
+      <option [value]="status">{{ status }}</option>
+    }
+  </select>
+</div>
+
+@if (error()) {
+  <div class="banner banner-error">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <p class="muted">Loading orders…</p>
+} @else if (result(); as r) {
+  @if (r.items.length === 0) {
+    <p class="muted">No orders found.</p>
+  } @else {
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Customer</th>
+          <th>Created</th>
+          <th>Status</th>
+          <th class="right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of r.items; track order.id) {
+          <tr [routerLink]="['/orders', order.id]" class="row-link">
+            <td>{{ order.externalReference }}</td>
+            <td>{{ order.customerName }}</td>
+            <td>{{ order.createdAtUtc | date: 'medium' }}</td>
+            <td><span class="status" [class]="'status-' + order.status.toLowerCase()">{{ order.status }}</span></td>
+            <td class="right">{{ order.total | currency: order.currency }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button (click)="goToPage(page() - 1)" [disabled]="page() <= 1">Previous</button>
+      <span>Page {{ page() }} of {{ totalPages() }} ({{ r.totalCount }} orders)</span>
+      <button (click)="goToPage(page() + 1)" [disabled]="page() >= totalPages()">Next</button>
+    </div>
+  }
+}
