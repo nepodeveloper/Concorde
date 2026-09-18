@@ -1,0 +1,54 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}`) = "Concorde.Domain`, "src\Concorde.Domain\Concorde.Domain.csproj`, "{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}"
+EndProject
+Project("{6F47D8D0-5966-4C5E-8626-7E87FA72E734}`) = "Concorde.Application`, "src\Concorde.Application\Concorde.Application.csproj`, "{6F47D8D0-5966-4C5E-8626-7E87FA72E734}"
+EndProject
+Project("{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}`) = "Concorde.Infrastructure`, "src\Concorde.Infrastructure\Concorde.Infrastructure.csproj`, "{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}"
+EndProject
+Project("{88CEB664-E557-4BB5-B395-AB9AA3869423}`) = "Concorde.Api`, "src\Concorde.Api\Concorde.Api.csproj`, "{88CEB664-E557-4BB5-B395-AB9AA3869423}"
+EndProject
+Project("{068332B5-387E-445C-84D9-9C714AB2E767}`) = "Concorde.Domain.Tests`, "tests\Concorde.Domain.Tests\Concorde.Domain.Tests.csproj`, "{068332B5-387E-445C-84D9-9C714AB2E767}"
+EndProject
+Project("{A7B99B1B-3380-4ED2-84DB-83D769379960}`) = "Concorde.Application.Tests`, "tests\Concorde.Application.Tests\Concorde.Application.Tests.csproj`, "{A7B99B1B-3380-4ED2-84DB-83D769379960}"
+EndProject
+Project("{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}`) = "Concorde.IntegrationTests`, "tests\Concorde.IntegrationTests\Concorde.IntegrationTests.csproj`, "{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}"
+EndProject
+Global
+GlobalSection(SolutionConfigurationPlatforms) = preSolution
+Debug|Any CPU = Debug|Any CPU
+Release|Any CPU = Release|Any CPU
+EndGlobalSection
+GlobalSection(ProjectConfigurationPlatforms) = postSolution
+{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{76713BA0-EAD2-4EE7-BD02-2DB6DF78D084}.Release|Any CPU.Build.0 = Release|Any CPU
+{6F47D8D0-5966-4C5E-8626-7E87FA72E734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{6F47D8D0-5966-4C5E-8626-7E87FA72E734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{6F47D8D0-5966-4C5E-8626-7E87FA72E734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{6F47D8D0-5966-4C5E-8626-7E87FA72E734}.Release|Any CPU.Build.0 = Release|Any CPU
+{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{ABA0A3B0-94F9-40C6-A305-AED4239F9ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+{88CEB664-E557-4BB5-B395-AB9AA3869423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{88CEB664-E557-4BB5-B395-AB9AA3869423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{88CEB664-E557-4BB5-B395-AB9AA3869423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{88CEB664-E557-4BB5-B395-AB9AA3869423}.Release|Any CPU.Build.0 = Release|Any CPU
+{068332B5-387E-445C-84D9-9C714AB2E767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{068332B5-387E-445C-84D9-9C714AB2E767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{068332B5-387E-445C-84D9-9C714AB2E767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{068332B5-387E-445C-84D9-9C714AB2E767}.Release|Any CPU.Build.0 = Release|Any CPU
+{A7B99B1B-3380-4ED2-84DB-83D769379960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{A7B99B1B-3380-4ED2-84DB-83D769379960}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{A7B99B1B-3380-4ED2-84DB-83D769379960}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{A7B99B1B-3380-4ED2-84DB-83D769379960}.Release|Any CPU.Build.0 = Release|Any CPU
+{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{B0B584D7-6B33-4B60-995E-5F53B77CCFE2}.Release|Any CPU.Build.0 = Release|Any CPU
+EndGlobalSection
+EndGlobal
