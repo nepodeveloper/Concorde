@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Concorde.Api/Concorde.Api.csproj" />
+    <Project Path="src/Concorde.Application/Concorde.Application.csproj" />
+    <Project Path="src/Concorde.Domain/Concorde.Domain.csproj" />
+    <Project Path="src/Concorde.Infrastructure/Concorde.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Concorde.Application.Tests/Concorde.Application.Tests.csproj" />
+    <Project Path="tests/Concorde.Domain.Tests/Concorde.Domain.Tests.csproj" />
+    <Project Path="tests/Concorde.IntegrationTests/Concorde.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

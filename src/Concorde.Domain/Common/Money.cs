@@ -65,7 +65,7 @@ public sealed class Money : IEquatable<Money>
 
     public override int GetHashCode() => Amount.GetHashCode();
 
-    public override string ToString() => Amount.ToString("F2");
+    public override string ToString() => Amount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
 
     private static int GetDecimalPlaces(decimal value)
     {

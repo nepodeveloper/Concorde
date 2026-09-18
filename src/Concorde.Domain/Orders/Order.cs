@@ -22,8 +22,8 @@ public class Order
     public Currency Currency { get; private set; }
     public string? Notes { get; private set; }
     public OrderStatus Status { get; private set; }
-    public Money Subtotal { get; private set; }
-    public Money Total { get; private set; }
+    public Money Subtotal { get; private set; } = new(0);
+    public Money Total { get; private set; } = new(0);
     public DateTime CreatedAtUtc { get; private set; }
     public DateTime UpdatedAtUtc { get; private set; }
 

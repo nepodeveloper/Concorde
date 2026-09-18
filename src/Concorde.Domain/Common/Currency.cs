@@ -39,6 +39,12 @@ public sealed class Currency : IEquatable<Currency>
 
     public string Code { get; }
 
+    /// <summary>
+    /// Returns true when the code is a recognized ISO 4217 alpha-3 currency code.
+    /// </summary>
+    public static bool IsValid(string? code) =>
+        !string.IsNullOrWhiteSpace(code) && ValidCurrencyCodes.Contains(code.Trim());
+
     public Currency(string code)
     {
         if (string.IsNullOrWhiteSpace(code))

@@ -36,8 +36,8 @@ public class OrderLine
         ArgumentNullException.ThrowIfNull(unitPrice);
 
         Id = Guid.NewGuid();
-        Sku = sku;
-        Name = name;
+        Sku = sku.Trim();
+        Name = name.Trim();
         Quantity = quantity;
         UnitPrice = unitPrice;
         LineTotal = Money.FromLineCalculation(quantity, unitPrice);
@@ -52,8 +52,6 @@ public class OrderLine
         if (trimmed.Length > MaxSkuLength)
             throw new ArgumentException(
                 $"SKU may not exceed {MaxSkuLength} characters.", nameof(sku));
-
-        Sku = trimmed;
     }
 
     private static void ValidateName(string name)
