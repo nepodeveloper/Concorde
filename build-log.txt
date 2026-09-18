@@ -1,0 +1,25 @@
+  Determining projects to restore...
+  Restored C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Infrastructure\Concorde.Infrastructure.csproj (in 16,9 sec).
+  Restored C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Api\Concorde.Api.csproj (in 16,9 sec).
+  Restored C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.IntegrationTests\Concorde.IntegrationTests.csproj (in 16,9 sec).
+  4 of 7 projects are up-to-date for restore.
+  Concorde.Domain -> C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Domain\bin\Debug\net10.0\Concorde.Domain.dll
+  Concorde.Application -> C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Application\bin\Debug\net10.0\Concorde.Application.dll
+  Concorde.Domain.Tests -> C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.Domain.Tests\bin\Debug\net10.0\Concorde.Domain.Tests.dll
+Test run for C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.Domain.Tests\bin\Debug\net10.0\Concorde.Domain.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    97, Skipped:     0, Total:    97, Duration: 176 ms - Concorde.Domain.Tests.dll (net10.0)
+  Concorde.Infrastructure -> C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Infrastructure\bin\Debug\net10.0\Concorde.Infrastructure.dll
+  Concorde.Application.Tests -> C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.Application.Tests\bin\Debug\net10.0\Concorde.Application.Tests.dll
+Test run for C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.Application.Tests\bin\Debug\net10.0\Concorde.Application.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+  Concorde.Api -> C:\Users\27769\Documents\Nepo\Concorde\src\Concorde.Api\bin\Debug\net10.0\Concorde.Api.dll
+  Concorde.IntegrationTests -> C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.IntegrationTests\bin\Debug\net10.0\Concorde.IntegrationTests.dll
+Test run for C:\Users\27769\Documents\Nepo\Concorde\tests\Concorde.IntegrationTests\bin\Debug\net10.0\Concorde.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+
+Passed!  - Failed:     0, Passed:    43, Skipped:     0, Total:    43, Duration: 150 ms - Concorde.Application.Tests.dll (net10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    13, Skipped:     0, Total:    13, Duration: 6 s - Concorde.IntegrationTests.dll (net10.0)
+
