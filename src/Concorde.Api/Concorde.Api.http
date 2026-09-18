@@ -1,0 +1,79 @@
+@baseUrl = http://localhost:5000
+
+### Health check
+GET {{baseUrl}}/health
+
+### OpenAPI document (Development only)
+GET {{baseUrl}}/openapi/v1.json
+
+### Create an order (201 Created)
+POST {{baseUrl}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "externalReference": "PO-2026-00123",
+  "customerName": "Acme Corp",
+  "customerCode": "ACME-001",
+  "currency": "ZAR",
+  "notes": "Deliver before month end",
+  "lines": [
+    { "sku": "SKU-A", "name": "Product A", "quantity": 2, "unitPrice": 100.00 },
+    { "sku": "SKU-B", "name": "Product B", "quantity": 3, "unitPrice": 50.00 }
+  ]
+}
+
+### Repeat the same order (200 OK — idempotent replay, same order ID)
+POST {{baseUrl}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "externalReference": "PO-2026-00123",
+  "customerName": "Acme Corp",
+  "currency": "ZAR",
+  "lines": [
+    { "sku": "SKU-A", "name": "Product A", "quantity": 2, "unitPrice": 100.00 }
+  ]
+}
+
+### Validation failure (400 VALIDATION_FAILED — multiple field errors)
+POST {{baseUrl}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "externalReference": "",
+  "customerName": "",
+  "currency": "XXX1",
+  "lines": [
+    { "sku": "", "name": "Product A", "quantity": 0, "unitPrice": -1 }
+  ]
+}
+
+### List orders (paginated)
+GET {{baseUrl}}/api/v1/orders?page=1&pageSize=20
+
+### List orders filtered by status
+GET {{baseUrl}}/api/v1/orders?status=Pending
+
+### Get order by ID (replace with a real ID from a create response)
+GET {{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000
+
+### Get order with malformed ID (404 ORDER_NOT_FOUND)
+GET {{baseUrl}}/api/v1/orders/not-a-guid
+
+### Confirm an order (replace with a real ID)
+PATCH {{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000/status
+Content-Type: application/json
+
+{ "status": "Confirmed" }
+
+### Invalid transition (409 INVALID_STATUS_TRANSITION — e.g. Pending → Fulfilled)
+PATCH {{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000/status
+Content-Type: application/json
+
+{ "status": "Fulfilled" }
+
+### Unknown status value (400 VALIDATION_FAILED)
+PATCH {{baseUrl}}/api/v1/orders/00000000-0000-0000-0000-000000000000/status
+Content-Type: application/json
+
+{ "status": "Shipped" }
