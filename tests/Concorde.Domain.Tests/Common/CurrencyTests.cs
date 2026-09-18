@@ -69,7 +69,7 @@ public class CurrencyTests
     [Fact]
     public void Constructor_WithInvalidCurrencyCode_Throws()
     {
-        var ex = Assert.Throws<ArgumentException>(() => new Currency("XXX1"));
+        var ex = Assert.Throws<ArgumentException>(() => new Currency("ABC"));
         Assert.Contains("not a recognized ISO 4217", ex.Message);
     }
 

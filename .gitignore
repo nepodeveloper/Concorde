@@ -25,3 +25,5 @@ build/
 .env
 .env.*
 !.env.example
+test-output.txt
+*.slnx.user
