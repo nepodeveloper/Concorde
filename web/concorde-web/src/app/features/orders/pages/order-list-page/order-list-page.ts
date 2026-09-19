@@ -20,10 +20,42 @@ export class OrderListPage {
   readonly error = signal<string | null>(null);
   readonly page = signal(1);
   readonly statusFilter = signal<OrderStatus | ''>('');
+  readonly searchTerm = signal('');
 
   readonly totalPages = computed(() => {
     const r = this.result();
     return r ? Math.max(1, Math.ceil(r.totalCount / r.pageSize)) : 1;
+  });
+
+  /** Client-side quick search over the loaded page by reference or customer. */
+  readonly visibleOrders = computed(() => {
+    const r = this.result();
+    if (!r) return [];
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return r.items;
+    return r.items.filter(
+      (o) =>
+        o.externalReference.toLowerCase().includes(term) ||
+        o.customerName.toLowerCase().includes(term),
+    );
+  });
+
+  readonly stats = computed(() => {
+    const r = this.result();
+    const items = r?.items ?? [];
+    // Revenue must never mix currencies; report one figure per currency (no FX conversion in MVP).
+    const revenueByCurrency = new Map<string, number>();
+    for (const o of items) {
+      if (o.status === 'Cancelled') continue;
+      revenueByCurrency.set(o.currency, (revenueByCurrency.get(o.currency) ?? 0) + o.total);
+    }
+    return {
+      totalOrders: r?.totalCount ?? 0,
+      pending: items.filter((o) => o.status === 'Pending').length,
+      revenue: [...revenueByCurrency.entries()]
+        .map(([currency, total]) => ({ currency, total }))
+        .sort((a, b) => b.total - a.total),
+    };
   });
 
   constructor() {
@@ -52,6 +84,10 @@ export class OrderListPage {
     this.statusFilter.set(value as OrderStatus | '');
     this.page.set(1);
     this.load();
+  }
+
+  searchChanged(value: string): void {
+    this.searchTerm.set(value);
   }
 
   goToPage(page: number): void {

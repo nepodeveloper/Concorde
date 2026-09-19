@@ -14,7 +14,8 @@ public class OrderStatusTransitionPolicyTests
     [InlineData(OrderStatus.Confirmed, OrderStatus.Pending, false)]
     [InlineData(OrderStatus.Fulfilled, OrderStatus.Pending, false)]
     [InlineData(OrderStatus.Fulfilled, OrderStatus.Confirmed, false)]
-    [InlineData(OrderStatus.Fulfilled, OrderStatus.Cancelled, false)]
+    // A fulfilled order may still be cancelled (returns/refunds) with a reason.
+    [InlineData(OrderStatus.Fulfilled, OrderStatus.Cancelled, true)]
     [InlineData(OrderStatus.Cancelled, OrderStatus.Pending, false)]
     [InlineData(OrderStatus.Cancelled, OrderStatus.Confirmed, false)]
     [InlineData(OrderStatus.Cancelled, OrderStatus.Fulfilled, false)]
@@ -58,11 +59,12 @@ public class OrderStatusTransitionPolicyTests
     }
 
     [Fact]
-    public void GetValidTransitions_FromFulfilled_ReturnsEmpty()
+    public void GetValidTransitions_FromFulfilled_AllowsCancellation()
     {
         var validTransitions = OrderStatusTransitionPolicy.GetValidTransitions(OrderStatus.Fulfilled);
-        
-        Assert.Empty(validTransitions);
+
+        var only = Assert.Single(validTransitions);
+        Assert.Equal(OrderStatus.Cancelled, only);
     }
 
     [Fact]

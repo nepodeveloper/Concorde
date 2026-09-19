@@ -16,6 +16,7 @@ export interface Order {
   currency: string;
   notes: string | null;
   status: OrderStatus;
+  statusReason: string | null;
   subtotal: number;
   total: number;
   createdAtUtc: string;
@@ -68,10 +69,13 @@ export interface CreateOrderRequest {
   }[];
 }
 
+/** Amend a pending order; the external reference is immutable. */
+export type UpdateOrderRequest = Omit<CreateOrderRequest, 'externalReference'>;
+
 /** FR-07.7: the UI only offers transitions valid for the current status. */
 export const VALID_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   Pending: ['Confirmed', 'Cancelled'],
   Confirmed: ['Fulfilled', 'Cancelled'],
-  Fulfilled: [],
+  Fulfilled: ['Cancelled'],
   Cancelled: [],
 };

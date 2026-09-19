@@ -52,6 +52,14 @@ public sealed class ApiExceptionHandler : IExceptionHandler
                     [],
                     traceId)),
 
+            OrderNotEditableException notEditable => (
+                StatusCodes.Status409Conflict,
+                new ErrorResponse(
+                    ErrorCodes.OrderNotEditable,
+                    notEditable.Message,
+                    [],
+                    traceId)),
+
             _ => (0, null!),
         };
 

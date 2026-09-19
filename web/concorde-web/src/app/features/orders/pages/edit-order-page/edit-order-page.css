@@ -2,6 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
@@ -35,6 +37,15 @@
 .field input,
 .field textarea {
   padding: 0.45rem 0.6rem;
+}
+
+.field input:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.hint {
+  font-size: 0.8rem;
 }
 
 .field-error {

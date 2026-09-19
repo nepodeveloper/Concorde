@@ -97,10 +97,15 @@ export class CreateOrderPage {
       .subscribe({
         next: (outcome) => {
           if (!outcome.wasCreated) {
-            // §33: a safe replay is not an error to the user.
+            
             this.banner.set('This order was already received. Showing the existing order.');
+            
+            setTimeout(() => {
+              this.router.navigate(['/orders', outcome.order.id]);
+            }, 2000);
+          } else {
+            this.router.navigate(['/orders', outcome.order.id]);
           }
-          this.router.navigate(['/orders', outcome.order.id]);
         },
         error: (err) => {
           this.submitting.set(false);

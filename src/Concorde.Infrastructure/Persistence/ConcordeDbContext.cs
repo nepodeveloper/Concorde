@@ -48,6 +48,9 @@ public class ConcordeDbContext : DbContext
                 .HasMaxLength(20)
                 .HasConversion<string>();
 
+            order.Property(o => o.StatusReason)
+                .HasMaxLength(Order.MaxStatusReasonLength);
+
             order.Property(o => o.Subtotal)
                 .IsRequired()
                 .HasConversion(m => m.Amount, amount => new Money(amount));

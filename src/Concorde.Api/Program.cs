@@ -5,6 +5,7 @@ using Concorde.Application.Orders.ChangeStatus;
 using Concorde.Application.Orders.Create;
 using Concorde.Application.Orders.Get;
 using Concorde.Application.Orders.List;
+using Concorde.Application.Orders.Update;
 using Concorde.Infrastructure;
 using Concorde.Infrastructure.Persistence;
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<CreateOrderHandler>();
 builder.Services.AddScoped<GetOrderHandler>();
 builder.Services.AddScoped<ListOrdersHandler>();
 builder.Services.AddScoped<ChangeOrderStatusHandler>();
+builder.Services.AddScoped<UpdateOrderHandler>();
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();

@@ -13,6 +13,11 @@ export const routes: Routes = [
       import('./features/orders/pages/create-order-page/create-order-page').then((m) => m.CreateOrderPage),
   },
   {
+    path: 'orders/:id/edit',
+    loadComponent: () =>
+      import('./features/orders/pages/edit-order-page/edit-order-page').then((m) => m.EditOrderPage),
+  },
+  {
     path: 'orders/:id',
     loadComponent: () =>
       import('./features/orders/pages/order-detail-page/order-detail-page').then((m) => m.OrderDetailPage),

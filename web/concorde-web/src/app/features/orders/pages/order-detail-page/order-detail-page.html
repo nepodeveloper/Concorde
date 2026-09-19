@@ -11,8 +11,16 @@
     <div>
       <h1>{{ o.externalReference }}</h1>
       <span class="status" [class]="'status-' + o.status.toLowerCase()">{{ o.status }}</span>
+      @if (o.statusReason) {
+        <p class="muted status-reason">Reason: {{ o.statusReason }}</p>
+      }
     </div>
-    <a routerLink="/orders">Back to orders</a>
+    <div class="header-links">
+      @if (o.status === 'Pending' || o.status === 'Confirmed') {
+        <a [routerLink]="['/orders', o.id, 'edit']" class="btn">Edit order</a>
+      }
+      <a routerLink="/orders">Back to orders</a>
+    </div>
   </div>
 
   @if (error()) {
@@ -84,13 +92,35 @@
             class="btn"
             [class.btn-danger]="status === 'Cancelled'"
             [class.btn-primary]="status !== 'Cancelled'"
-            [disabled]="changingStatus()"
+            [disabled]="changingStatus() || cancelFormOpen()"
             (click)="changeStatus(status)"
           >
             Mark as {{ status }}
           </button>
         }
       </div>
+
+      @if (cancelFormOpen()) {
+        <div class="cancel-form">
+          <label for="cancelReason">
+            Cancellation reason {{ cancelReasonRequired() ? '(required)' : '(optional)' }}
+          </label>
+          <textarea
+            id="cancelReason"
+            rows="2"
+            maxlength="500"
+            [value]="cancelReason()"
+            (input)="cancelReason.set($any($event.target).value)"
+            placeholder="e.g. Customer requested a refund"
+          ></textarea>
+          <div class="actions">
+            <button class="btn btn-danger" [disabled]="changingStatus()" (click)="confirmCancel()">
+              Confirm cancellation
+            </button>
+            <button class="btn" [disabled]="changingStatus()" (click)="dismissCancel()">Keep order</button>
+          </div>
+        </div>
+      }
     </section>
   }
 } @else if (error()) {

@@ -16,5 +16,13 @@ public sealed record OrderLineRequest(
     decimal Quantity,
     decimal UnitPrice);
 
-/// <summary>Payload for changing an order's lifecycle status (US-07).</summary>
-public sealed record ChangeOrderStatusRequest(string? Status);
+/// <summary>Payload for changing an order's lifecycle status (US-07). A reason is required when cancelling a fulfilled order.</summary>
+public sealed record ChangeOrderStatusRequest(string? Status, string? Reason = null);
+
+/// <summary>Payload for amending a pending order. The external reference is immutable.</summary>
+public sealed record UpdateOrderRequest(
+    string? CustomerName,
+    string? CustomerCode,
+    string? Currency,
+    string? Notes,
+    List<OrderLineRequest>? Lines);

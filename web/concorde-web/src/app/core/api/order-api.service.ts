@@ -7,6 +7,7 @@ import {
   OrderStatus,
   OrderSummary,
   PagedResult,
+  UpdateOrderRequest,
 } from '../models/order.models';
 
 export interface CreateOrderOutcome {
@@ -43,7 +44,11 @@ export class OrderApiService {
     return this.http.get<Order>(`${this.baseUrl}/${id}`);
   }
 
-  changeStatus(id: string, status: OrderStatus): Observable<Order> {
-    return this.http.patch<Order>(`${this.baseUrl}/${id}/status`, { status });
+  updateOrder(id: string, request: UpdateOrderRequest): Observable<Order> {
+    return this.http.put<Order>(`${this.baseUrl}/${id}`, request);
+  }
+
+  changeStatus(id: string, status: OrderStatus, reason?: string): Observable<Order> {
+    return this.http.patch<Order>(`${this.baseUrl}/${id}/status`, { status, reason: reason ?? null });
   }
 }

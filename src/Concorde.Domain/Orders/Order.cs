@@ -14,6 +14,7 @@ public class Order
     public const int MaxCustomerNameLength = 200;
     public const int MaxCustomerCodeLength = 50;
     public const int MaxNotesLength = 1000;
+    public const int MaxStatusReasonLength = 500;
 
     public Guid Id { get; private set; }
     public string ExternalReference { get; private set; }
@@ -22,6 +23,8 @@ public class Order
     public Currency Currency { get; private set; }
     public string? Notes { get; private set; }
     public OrderStatus Status { get; private set; }
+    /// <summary>Reason supplied with the most recent status change, e.g. why a fulfilled order was cancelled.</summary>
+    public string? StatusReason { get; private set; }
     public Money Subtotal { get; private set; } = new(0);
     public Money Total { get; private set; } = new(0);
     public DateTime CreatedAtUtc { get; private set; }
@@ -74,9 +77,10 @@ public class Order
 
     /// <summary>
     /// Attempt to change the order status.
-    /// Throws if the transition is invalid.
+    /// Throws if the transition is invalid, or if a fulfilled order is
+    /// cancelled without a reason.
     /// </summary>
-    public void ChangeStatus(OrderStatus newStatus)
+    public void ChangeStatus(OrderStatus newStatus, string? reason = null)
     {
         if (!OrderStatusTransitionPolicy.IsTransitionAllowed(Status, newStatus))
         {
@@ -84,8 +88,55 @@ public class Order
                 $"Order cannot transition from {Status} to {newStatus}.");
         }
 
+        var trimmedReason = string.IsNullOrWhiteSpace(reason) ? null : reason.Trim();
+
+        if (trimmedReason is { Length: > MaxStatusReasonLength })
+            throw new ArgumentException(
+                $"Status reason may not exceed {MaxStatusReasonLength} characters.", nameof(reason));
+
+        // Cancelling a fulfilled order is exceptional and must be justified.
+        if (Status == OrderStatus.Fulfilled && newStatus == OrderStatus.Cancelled && trimmedReason is null)
+            throw new ArgumentException(
+                "A reason is required when cancelling a fulfilled order.", nameof(reason));
+
         Status = newStatus;
+        StatusReason = trimmedReason;
         UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// Amend order details and line items. Allowed until the order is
+    /// fulfilled or cancelled; the external reference is immutable.
+    /// Totals are recalculated.
+    /// </summary>
+    public void Amend(
+        string customerName,
+        string? customerCode,
+        Currency currency,
+        IEnumerable<OrderLine> lines,
+        string? notes = null)
+    {
+        if (Status is OrderStatus.Fulfilled or OrderStatus.Cancelled)
+            throw new InvalidOperationException(
+                $"A {Status} order can no longer be edited.");
+
+        ValidateCustomerName(customerName);
+        ValidateCustomerCode(customerCode);
+        ArgumentNullException.ThrowIfNull(currency);
+        ValidateNotes(notes);
+
+        var lineList = lines.ToList();
+        ValidateLineItems(lineList);
+
+        CustomerName = customerName.Trim();
+        CustomerCode = customerCode?.Trim();
+        Currency = currency;
+        Notes = notes?.Trim();
+        _lines.Clear();
+        _lines.AddRange(lineList);
+        UpdatedAtUtc = DateTime.UtcNow;
+
+        CalculateTotals();
     }
 
     private void CalculateTotals()

@@ -7,10 +7,11 @@
 
 .card {
   background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(30, 58, 138, 0.08);
 }
 
 .detail-grid {
@@ -21,7 +22,7 @@
 }
 
 .detail-grid dt {
-  color: #64748b;
+  color: #6b7280;
 }
 
 .detail-grid dd {
@@ -37,7 +38,7 @@
 .orders-table td {
   text-align: left;
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #eef0f4;
 }
 
 .right {
@@ -55,4 +56,48 @@
 .actions {
   display: flex;
   gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.header-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.status-reason {
+  margin: 0.4rem 0 0;
+  font-style: italic;
+}
+
+.cancel-form {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eef0f4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cancel-form textarea {
+  padding: 0.45rem 0.6rem;
+  resize: vertical;
+}
+
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+  .detail-grid dt {
+    margin-top: 0.5rem;
+  }
+  .orders-table {
+    display: block;
+    overflow-x: auto;
+  }
+  .actions .btn {
+    flex: 1;
+    text-align: center;
+  }
 }
