@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Data;
+using System.Text.Json.Serialization;
 using Concorde.Api.Endpoints;
 using Concorde.Api.Middleware;
 using Concorde.Application.Orders.ChangeStatus;
@@ -8,6 +9,7 @@ using Concorde.Application.Orders.List;
 using Concorde.Application.Orders.Update;
 using Concorde.Infrastructure;
 using Concorde.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 const string AngularDevCorsPolicy = "AngularDev";
 
@@ -42,7 +44,9 @@ var app = builder.Build();
 // MVP schema management: EnsureCreated instead of migrations (documented in SOLUTION.md).
 using (var scope = app.Services.CreateScope())
 {
-    scope.ServiceProvider.GetRequiredService<ConcordeDbContext>().Database.EnsureCreated();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ConcordeDbContext>();
+    dbContext.Database.EnsureCreated();
+    EnsureStatusReasonColumnExists(dbContext);
 }
 
 app.UseExceptionHandler();
@@ -61,7 +65,48 @@ app.MapGet("/health", () => TypedResults.Ok(new { status = "Healthy" }))
 
 app.Run();
 
+static void EnsureStatusReasonColumnExists(ConcordeDbContext dbContext)
+{
+    var connection = dbContext.Database.GetDbConnection();
+    var shouldClose = connection.State != ConnectionState.Open;
+
+    if (shouldClose)
+    {
+        connection.Open();
+    }
+
+    try
+    {
+        using var tableInfoCommand = connection.CreateCommand();
+        tableInfoCommand.CommandText = "PRAGMA table_info('Orders');";
+
+        using var reader = tableInfoCommand.ExecuteReader();
+        var hasStatusReasonColumn = false;
+
+        while (reader.Read())
+        {
+            if (string.Equals(reader.GetString(1), "StatusReason", StringComparison.OrdinalIgnoreCase))
+            {
+                hasStatusReasonColumn = true;
+                break;
+            }
+        }
+
+        if (!hasStatusReasonColumn)
+        {
+            using var alterTableCommand = connection.CreateCommand();
+            alterTableCommand.CommandText = "ALTER TABLE Orders ADD COLUMN StatusReason TEXT NULL;";
+            alterTableCommand.ExecuteNonQuery();
+        }
+    }
+    finally
+    {
+        if (shouldClose)
+        {
+            connection.Close();
+        }
+    }
+}
+
 // Exposes the entry point to WebApplicationFactory in integration tests.
 public partial class Program { }
-
-
