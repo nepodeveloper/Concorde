@@ -47,7 +47,10 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ConcordeDbContext>();
     dbContext.Database.EnsureCreated();
-    EnsureStatusReasonColumnExists(dbContext);
+    if (dbContext.Database.IsSqlite())
+    {
+        EnsureStatusReasonColumnExists(dbContext);
+    }
 }
 
 app.UseExceptionHandler();
