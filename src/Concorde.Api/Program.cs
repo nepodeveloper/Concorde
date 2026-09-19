@@ -9,6 +9,7 @@ using Concorde.Application.Orders.List;
 using Concorde.Application.Orders.Update;
 using Concorde.Infrastructure;
 using Concorde.Infrastructure.Persistence;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 const string AngularDevCorsPolicy = "AngularDev";
@@ -96,7 +97,14 @@ static void EnsureStatusReasonColumnExists(ConcordeDbContext dbContext)
         {
             using var alterTableCommand = connection.CreateCommand();
             alterTableCommand.CommandText = "ALTER TABLE Orders ADD COLUMN StatusReason TEXT NULL;";
-            alterTableCommand.ExecuteNonQuery();
+            try
+            {
+                alterTableCommand.ExecuteNonQuery();
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == 1 && ex.Message.Contains("duplicate column name: StatusReason", StringComparison.OrdinalIgnoreCase))
+            {
+                // Another startup path added the column concurrently.
+            }
         }
     }
     finally
