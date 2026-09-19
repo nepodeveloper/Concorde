@@ -16,5 +16,6 @@ public static class ErrorCodes
     public const string ValidationFailed = "VALIDATION_FAILED";
     public const string OrderNotFound = "ORDER_NOT_FOUND";
     public const string InvalidStatusTransition = "INVALID_STATUS_TRANSITION";
+    public const string OrderNotEditable = "ORDER_NOT_EDITABLE";
     public const string InternalError = "INTERNAL_ERROR";
 }

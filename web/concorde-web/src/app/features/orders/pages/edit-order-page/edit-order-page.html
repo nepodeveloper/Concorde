@@ -1,0 +1,135 @@
+<div class="page-header">
+  <h1>Edit Order</h1>
+  @if (order(); as o) {
+    <a [routerLink]="['/orders', o.id]">Back to order</a>
+  } @else {
+    <a routerLink="/orders">Back to orders</a>
+  }
+</div>
+
+@if (banner()) {
+  <div class="banner banner-error">{{ banner() }}</div>
+}
+
+@if (loading()) {
+  <p class="muted">Loading order…</p>
+} @else if (notFound()) {
+  <div class="banner banner-error">
+    <h2>Order not found</h2>
+    <p>The order you are looking for does not exist.</p>
+    <a routerLink="/orders">Back to order list</a>
+  </div>
+} @else if (order(); as o) {
+  @if (editable) {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <section class="card">
+        <h2>Order</h2>
+
+        <div class="field">
+          <label>External reference</label>
+          <input [value]="o.externalReference" disabled />
+          <span class="muted hint">The external reference cannot be changed.</span>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="customerName">Customer name *</label>
+            <input id="customerName" formControlName="customerName" />
+            @if (form.controls.customerName.touched && form.controls.customerName.invalid) {
+              <span class="field-error">Customer name is required (max 200 characters).</span>
+            }
+            @if (serverError('customerName'); as message) {
+              <span class="field-error">{{ message }}</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="customerCode">Customer code</label>
+            <input id="customerCode" formControlName="customerCode" />
+            @if (serverError('customerCode'); as message) {
+              <span class="field-error">{{ message }}</span>
+            }
+          </div>
+
+          <div class="field field-narrow">
+            <label for="currency">Currency *</label>
+            <input id="currency" formControlName="currency" maxlength="3" placeholder="ZAR" />
+            @if (serverError('currency'); as message) {
+              <span class="field-error">{{ message }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="notes">Notes</label>
+          <textarea id="notes" formControlName="notes" rows="2"></textarea>
+          @if (serverError('notes'); as message) {
+            <span class="field-error">{{ message }}</span>
+          }
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="lines-header">
+          <h2>Line items</h2>
+          <button type="button" class="btn" (click)="addLine()">Add line</button>
+        </div>
+
+        @if (serverError('lines'); as message) {
+          <div class="field-error">{{ message }}</div>
+        }
+
+        <div formArrayName="lines">
+          @for (line of lines.controls; track line; let i = $index) {
+            <div class="line-row" [formGroupName]="i">
+              <div class="field">
+                <label [for]="'sku-' + i">SKU *</label>
+                <input [id]="'sku-' + i" formControlName="sku" />
+                @if (serverError('lines[' + i + '].sku'); as message) {
+                  <span class="field-error">{{ message }}</span>
+                }
+              </div>
+              <div class="field line-name">
+                <label [for]="'name-' + i">Name *</label>
+                <input [id]="'name-' + i" formControlName="name" />
+                @if (serverError('lines[' + i + '].name'); as message) {
+                  <span class="field-error">{{ message }}</span>
+                }
+              </div>
+              <div class="field field-narrow">
+                <label [for]="'quantity-' + i">Quantity *</label>
+                <input [id]="'quantity-' + i" type="number" formControlName="quantity" min="1" step="1" />
+                @if (serverError('lines[' + i + '].quantity'); as message) {
+                  <span class="field-error">{{ message }}</span>
+                }
+              </div>
+              <div class="field field-narrow">
+                <label [for]="'unitPrice-' + i">Unit price *</label>
+                <input [id]="'unitPrice-' + i" type="number" formControlName="unitPrice" min="0" step="0.01" />
+                @if (serverError('lines[' + i + '].unitPrice'); as message) {
+                  <span class="field-error">{{ message }}</span>
+                }
+              </div>
+              <button
+                type="button"
+                class="btn btn-danger remove-line"
+                (click)="removeLine(i)"
+                [disabled]="lines.length <= 1"
+              >
+                Remove
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+          {{ submitting() ? 'Saving…' : 'Save changes' }}
+        </button>
+      </div>
+    </form>
+  } @else {
+    <a [routerLink]="['/orders', o.id]" class="btn">View order</a>
+  }
+}

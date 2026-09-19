@@ -7,6 +7,7 @@ using Concorde.Application.Orders.ChangeStatus;
 using Concorde.Application.Orders.Create;
 using Concorde.Application.Orders.Get;
 using Concorde.Application.Orders.List;
+using Concorde.Application.Orders.Update;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 public static class OrderEndpoints
@@ -85,12 +86,40 @@ public static class OrderEndpoints
                 throw new OrderNotFoundException(Guid.Empty);
 
             var order = await handler.HandleAsync(
-                new ChangeOrderStatusCommand(orderId, request.Status), cancellationToken);
+                new ChangeOrderStatusCommand(orderId, request.Status, request.Reason), cancellationToken);
             return TypedResults.Ok(order);
         })
         .WithName("ChangeOrderStatus")
         .WithSummary("Change an order's status")
-        .WithDescription("Transitions the order through the lifecycle: Pending → Confirmed → Fulfilled, with Cancelled reachable from Pending or Confirmed.")
+        .WithDescription("Transitions the order through the lifecycle: Pending → Confirmed → Fulfilled. Cancelled is reachable from any active state; cancelling a fulfilled order requires a reason.")
+        .Produces<OrderDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status400BadRequest)
+        .Produces(StatusCodes.Status404NotFound)
+        .Produces(StatusCodes.Status409Conflict);
+
+        orders.MapPut("/{id}", async Task<Ok<OrderDto>> (
+            string id,
+            UpdateOrderRequest request,
+            UpdateOrderHandler handler,
+            CancellationToken cancellationToken) =>
+        {
+            if (!Guid.TryParse(id, out var orderId))
+                throw new OrderNotFoundException(Guid.Empty);
+
+            var command = new UpdateOrderCommand(
+                orderId,
+                request.CustomerName,
+                request.CustomerCode,
+                request.Currency,
+                request.Notes,
+                request.Lines?.Select(l => new CreateOrderLine(l.Sku, l.Name, l.Quantity, l.UnitPrice)).ToList());
+
+            var order = await handler.HandleAsync(command, cancellationToken);
+            return TypedResults.Ok(order);
+        })
+        .WithName("UpdateOrder")
+        .WithSummary("Amend an order")
+        .WithDescription("Updates customer details, notes, currency, and line items until the order is fulfilled or cancelled. The external reference is immutable; totals are recalculated on the server.")
         .Produces<OrderDto>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status400BadRequest)
         .Produces(StatusCodes.Status404NotFound)

@@ -29,3 +29,16 @@ public class InvalidStatusTransitionException : Exception
     public string FromStatus { get; }
     public string ToStatus { get; }
 }
+
+/// <summary>
+/// Thrown when an order can no longer be edited. Maps to 409 ORDER_NOT_EDITABLE.
+/// </summary>
+public class OrderNotEditableException : Exception
+{
+    public OrderNotEditableException(string status, string message) : base(message)
+    {
+        Status = status;
+    }
+
+    public string Status { get; }
+}

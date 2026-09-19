@@ -27,7 +27,7 @@ dotnet run
 
 OpenAPI/Swagger available at `http://localhost:5000/swagger`
 
-### Frontend Setup (Coming)
+### Frontend Setup
 
 ```bash
 cd web/concorde-web
@@ -38,6 +38,8 @@ npm install
 # Run development server (http://localhost:4200)
 npm start
 ```
+
+The app expects the API at `http://localhost:5000` (CORS is pre-configured for the Angular dev origin).
 
 ### Run Tests
 
@@ -74,7 +76,7 @@ Concorde/
 │  └─ Concorde.IntegrationTests/    # Full API + database tests
 │
 ├─ web/
-│  └─ concorde-web/                 # Angular frontend (TBD)
+│  └─ concorde-web/                 # Angular 22 frontend (signals, standalone components)
 │
 ├─ docs/
 │  └─ ORDER_INTAKE_USER_STORIES.md  # Product backlog & acceptance criteria

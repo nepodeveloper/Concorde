@@ -40,14 +40,13 @@ public static class OrderStatusTransitionPolicy
         if (from == to)
             return false;
 
-        // Terminal states cannot transition anywhere
-        if (from == OrderStatus.Fulfilled || from == OrderStatus.Cancelled)
-            return false;
-
         return from switch
         {
             OrderStatus.Pending => to is OrderStatus.Confirmed or OrderStatus.Cancelled,
             OrderStatus.Confirmed => to is OrderStatus.Fulfilled or OrderStatus.Cancelled,
+            // A fulfilled order may still be cancelled (returns/refunds) with a reason.
+            OrderStatus.Fulfilled => to is OrderStatus.Cancelled,
+            OrderStatus.Cancelled => false,
             _ => false,
         };
     }
@@ -61,7 +60,7 @@ public static class OrderStatusTransitionPolicy
         {
             OrderStatus.Pending => new[] { OrderStatus.Confirmed, OrderStatus.Cancelled },
             OrderStatus.Confirmed => new[] { OrderStatus.Fulfilled, OrderStatus.Cancelled },
-            OrderStatus.Fulfilled => Array.Empty<OrderStatus>(),
+            OrderStatus.Fulfilled => new[] { OrderStatus.Cancelled },
             OrderStatus.Cancelled => Array.Empty<OrderStatus>(),
             _ => Array.Empty<OrderStatus>(),
         };

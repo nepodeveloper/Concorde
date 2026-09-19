@@ -1,1 +1,107 @@
-/* You can add global styles to this file, and also import other style files */
+/* Elegant royal blue / white / gold theme */
+:root {
+  --royal: #1e3a8a;
+  --royal-dark: #172b66;
+  --royal-light: #eef2ff;
+  --gold: #c9a227;
+  --gold-light: #f6edd4;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --surface: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #f7f8fc;
+  color: var(--ink);
+}
+h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  color: var(--royal);
+}
+h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  color: var(--royal);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.muted { color: var(--muted); }
+.banner {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid;
+}
+.banner-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #b91c1c;
+  color: #991b1b;
+}
+input,
+select,
+textarea {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--royal);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
+}
+.btn {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary {
+  background: var(--royal);
+  border-color: var(--royal);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--royal-dark);
+}
+.btn-danger {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  color: #fff;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #991b1b;
+}
+.status {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.status-pending { background: var(--gold-light); color: #8a6d1a; }
+.status-confirmed { background: var(--royal-light); color: var(--royal); }
+.status-fulfilled { background: #dcfce7; color: #166534; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }

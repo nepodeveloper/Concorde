@@ -1,0 +1,93 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(30, 58, 138, 0.08);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  flex: 1;
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.field-narrow {
+  max-width: 9rem;
+}
+
+.field input,
+.field textarea {
+  padding: 0.45rem 0.6rem;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.lines-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.line-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border-top: 1px solid #eef0f4;
+  padding-top: 0.75rem;
+}
+
+.line-name {
+  flex: 2;
+}
+
+.remove-line {
+  margin-top: 1.4rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .field-narrow {
+    max-width: none;
+  }
+  .line-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .remove-line {
+    margin-top: 0.25rem;
+    align-self: flex-end;
+  }
+  .form-actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}

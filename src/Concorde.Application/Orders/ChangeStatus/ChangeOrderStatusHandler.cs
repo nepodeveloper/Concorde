@@ -5,7 +5,7 @@ using Concorde.Application.Common;
 using Concorde.Application.Validation;
 using Concorde.Domain.Orders;
 
-public sealed record ChangeOrderStatusCommand(Guid OrderId, string? NewStatus);
+public sealed record ChangeOrderStatusCommand(Guid OrderId, string? NewStatus, string? Reason = null);
 
 public class ChangeOrderStatusHandler
 {
@@ -38,7 +38,28 @@ public class ChangeOrderStatusHandler
         if (!OrderStatusTransitionPolicy.IsTransitionAllowed(order.Status, newStatus))
             throw new InvalidStatusTransitionException(order.Status.ToString(), newStatus.ToString());
 
-        order.ChangeStatus(newStatus);
+        var reason = string.IsNullOrWhiteSpace(command.Reason) ? null : command.Reason.Trim();
+
+        if (reason is { Length: > Order.MaxStatusReasonLength })
+        {
+            throw new ValidationException(new[]
+            {
+                new ValidationError("reason", ValidationErrorCodes.TooLong,
+                    $"Reason may not exceed {Order.MaxStatusReasonLength} characters."),
+            });
+        }
+
+        // Cancelling a fulfilled order must be justified.
+        if (order.Status == OrderStatus.Fulfilled && newStatus == OrderStatus.Cancelled && reason is null)
+        {
+            throw new ValidationException(new[]
+            {
+                new ValidationError("reason", ValidationErrorCodes.Required,
+                    "A reason is required when cancelling a fulfilled order."),
+            });
+        }
+
+        order.ChangeStatus(newStatus, reason);
         await _repository.UpdateAsync(order, cancellationToken);
 
         return OrderDto.FromDomain(order);

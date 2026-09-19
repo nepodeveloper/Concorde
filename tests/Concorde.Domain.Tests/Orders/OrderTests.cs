@@ -320,4 +320,92 @@ public class OrderTests
         Assert.NotEqual(originalUpdatedAt, order.UpdatedAtUtc);
         Assert.True(order.UpdatedAtUtc > originalUpdatedAt);
     }
+
+    [Fact]
+    public void ChangeStatus_CancellingFulfilledOrderWithoutReason_Throws()
+    {
+        var order = CreateFulfilledOrder();
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+            order.ChangeStatus(OrderStatus.Cancelled));
+
+        Assert.Contains("reason is required", ex.Message);
+    }
+
+    [Fact]
+    public void ChangeStatus_CancellingFulfilledOrderWithReason_SetsStatusReason()
+    {
+        var order = CreateFulfilledOrder();
+
+        order.ChangeStatus(OrderStatus.Cancelled, "Customer requested refund");
+
+        Assert.Equal(OrderStatus.Cancelled, order.Status);
+        Assert.Equal("Customer requested refund", order.StatusReason);
+    }
+
+    [Fact]
+    public void ChangeStatus_WithOverlongReason_Throws()
+    {
+        var order = CreateFulfilledOrder();
+        var reason = new string('x', Order.MaxStatusReasonLength + 1);
+
+        Assert.Throws<ArgumentException>(() =>
+            order.ChangeStatus(OrderStatus.Cancelled, reason));
+    }
+
+    [Fact]
+    public void Amend_WhilePending_UpdatesDetailsAndRecalculatesTotals()
+    {
+        var lines = new[] { CreateLine("SKU-A", "Product A", 1, 100m) };
+        var order = new Order("PO-001", "Customer", null, new Currency("ZAR"), lines);
+
+        order.Amend(
+            "New Customer",
+            "NC-01",
+            new Currency("USD"),
+            new[] { CreateLine("SKU-B", "Product B", 3, 50m) },
+            "amended");
+
+        Assert.Equal("New Customer", order.CustomerName);
+        Assert.Equal("NC-01", order.CustomerCode);
+        Assert.Equal("USD", order.Currency.Code);
+        Assert.Equal("amended", order.Notes);
+        Assert.Single(order.Lines);
+        Assert.Equal(150m, order.Total.Amount);
+    }
+
+    [Fact]
+    public void Amend_WhileConfirmed_IsAllowed()
+    {
+        var lines = new[] { CreateLine("SKU-A", "Product A", 1, 100m) };
+        var order = new Order("PO-001", "Customer", null, new Currency("ZAR"), lines);
+        order.ChangeStatus(OrderStatus.Confirmed);
+
+        order.Amend("New Customer", null, new Currency("ZAR"),
+            new[] { CreateLine("SKU-B", "Product B", 2, 25m) });
+
+        Assert.Equal("New Customer", order.CustomerName);
+        Assert.Equal(50m, order.Total.Amount);
+    }
+
+    [Fact]
+    public void Amend_WhenFulfilledOrCancelled_Throws()
+    {
+        var order = CreateFulfilledOrder();
+
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            order.Amend("New Customer", null, new Currency("ZAR"),
+                new[] { CreateLine("SKU-A", "Product A", 1, 100m) }));
+
+        Assert.Contains("no longer be edited", ex.Message);
+    }
+
+    private Order CreateFulfilledOrder()
+    {
+        var lines = new[] { CreateLine("SKU-A", "Product A", 1, 100m) };
+        var order = new Order("PO-001", "Customer", null, new Currency("ZAR"), lines);
+        order.ChangeStatus(OrderStatus.Confirmed);
+        order.ChangeStatus(OrderStatus.Fulfilled);
+        return order;
+    }
 }
